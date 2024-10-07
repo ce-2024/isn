@@ -1,6 +1,7 @@
 package com.instantsystem.android.newsapp.app
 
 import android.app.Application
+import com.instantsystem.android.core.common.di.commonDispatcherModule
 import com.instantsystem.android.core.network.di.coreNetworkModule
 import com.instantsystem.android.newsapp.di.appModules
 import org.koin.android.ext.koin.androidContext
@@ -14,6 +15,7 @@ class DefaultInstantSystemApp : Application() {
         startKoin {
             androidLogger()
             androidContext(applicationContext)
+            modules(commonDispatcherModule)
             modules(coreNetworkModule)
             modules(appModules)
         }
