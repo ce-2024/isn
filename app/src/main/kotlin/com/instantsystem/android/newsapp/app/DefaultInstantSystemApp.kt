@@ -3,7 +3,7 @@ package com.instantsystem.android.newsapp.app
 import android.app.Application
 import com.instantsystem.android.core.common.di.commonDispatcherModule
 import com.instantsystem.android.core.network.di.coreNetworkModule
-import com.instantsystem.android.feature.news.di.newsFeatureNetworkModule
+import com.instantsystem.android.feature.news.di.newsFeatureModules
 import com.instantsystem.android.newsapp.di.appModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -19,7 +19,7 @@ class DefaultInstantSystemApp : Application() {
             modules(commonDispatcherModule)
             modules(coreNetworkModule)
             modules(appModules)
-            modules(newsFeatureNetworkModule)
+            modules(newsFeatureModules)
         }
     }
 }

@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -11,7 +12,8 @@ android {
     defaultConfig {
         minSdk = 28
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner =
+            "com.instantsystem.android.feature.news.test.runner.NewsAppInstrumentationTestRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 

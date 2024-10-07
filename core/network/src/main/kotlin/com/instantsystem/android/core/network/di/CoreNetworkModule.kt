@@ -12,11 +12,14 @@ import kotlinx.serialization.json.Json
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+
+const val CORE_HTTP_CLIENT = "coreHttpClient"
+
 /**
  * core network module providing default HttpClient with minimal configuration
  */
 val coreNetworkModule = module {
-    single(named("coreHttpClient")) {
+    single(named(CORE_HTTP_CLIENT)) {
         HttpClient(CIO) {
             install(Logging) {
                 logger = Logger.ANDROID
