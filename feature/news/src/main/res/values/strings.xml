@@ -2,4 +2,5 @@
 <resources>
     <string name="loading">Waiting for items to load from the backend</string>
     <string name="article_link">Link:\n</string>
+    <string name="loading_error">Some error happened!!</string>
 </resources>

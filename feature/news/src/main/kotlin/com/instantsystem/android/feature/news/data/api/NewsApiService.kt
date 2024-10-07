@@ -16,5 +16,7 @@ interface NewsApiService {
         internal const val COUNTRY = "country"
         internal const val PAGE_SIZE = "pageSize"
         internal const val MAX_PER_PAGE = 5
+        internal const val SUCCESS_SERVER_RESULT_RESPONSE = "ok"
+
     }
 }

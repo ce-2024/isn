@@ -2,6 +2,7 @@ package com.instantsystem.android.feature.news.domain.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.instantsystem.android.feature.news.data.api.NewsApiService.Companion.SUCCESS_SERVER_RESULT_RESPONSE
 import com.instantsystem.android.feature.news.data.entity.Articles
 import com.instantsystem.android.feature.news.data.entity.TopHeadlinesRequest
 import com.instantsystem.android.feature.news.data.repository.NewsRepository
@@ -19,8 +20,8 @@ class NewsPagingSource(
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult.Page<Int, NewsArticle> {
-        try {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NewsArticle> {
+        return try {
             val nextPageNumber = params.key ?: 1
             val response = repository.topHeadlines(
                 TopHeadlinesRequest(
@@ -29,13 +30,16 @@ class NewsPagingSource(
                     country = country
                 )
             )
-            return LoadResult.Page(
-                data = response?.articles.toDomain(),
-                prevKey = null,
-                nextKey = nextPageNumber + 1
-            )
-        } catch (exception: Exception) {
-            throw exception
+            if (response?.status != SUCCESS_SERVER_RESULT_RESPONSE) {
+                LoadResult.Error(Exception(response?.message))
+            } else
+                LoadResult.Page(
+                    data = response.articles.toDomain(),
+                    prevKey = null,
+                    nextKey = nextPageNumber + 1
+                )
+        } catch (e: Exception) {
+            LoadResult.Error(e)
         }
     }
 }

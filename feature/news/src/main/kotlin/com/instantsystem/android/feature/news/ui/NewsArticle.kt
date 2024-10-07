@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -110,6 +111,13 @@ private fun NewsArticleList(
             }
         }
 
+        if (uiState.loadState.refresh is LoadState.Error) {
+            val errorState = uiState.loadState.refresh as LoadState.Error
+            item {
+                NewsErrorScreen(errorState.error)
+            }
+        }
+
         items(count = uiState.itemCount) { index ->
             val item = uiState[index]
             item?.let {
@@ -129,6 +137,22 @@ private fun NewsArticleList(
         }
     }
 
+}
+
+@Composable
+fun NewsErrorScreen(exception: Throwable?) {
+    Text(
+        modifier = Modifier.padding(vertical = 10.dp),
+        text = stringResource(R.string.loading_error),
+        color = Color.Red,
+        style = MaterialTheme.typography.titleLarge
+    )
+    Text(
+        modifier = Modifier.padding(10.dp),
+        text = "Message: ${exception?.message}",
+        color = Color.Red.copy(alpha = 0.7f),
+        style = MaterialTheme.typography.titleMedium
+    )
 }
 
 @Composable
