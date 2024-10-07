@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "Instant System News"
 include(":app")
 include(":core:designsystem")
+include(":core:network")
