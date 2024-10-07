@@ -50,6 +50,8 @@ android {
 
 dependencies {
 
+    implementation(project(":feature:news"))
+
     implementation(project(":core:designsystem"))
     implementation(project(":core:network"))
     implementation(project(":core:common"))
