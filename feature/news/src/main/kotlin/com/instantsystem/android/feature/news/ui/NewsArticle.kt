@@ -27,8 +27,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -40,6 +40,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.instantsystem.android.feature.news.R
 import com.instantsystem.android.feature.news.domain.model.NewsArticle
+import com.instantsystem.android.feature.news.ui.tag.NewsHomeScreenTestTags
 import org.koin.compose.koinInject
 import java.util.Locale
 
@@ -115,7 +116,7 @@ private fun NewsArticleList(
         if (uiState.loadState.refresh is LoadState.Error) {
             val errorState = uiState.loadState.refresh as LoadState.Error
             item {
-                NewsErrorScreen(errorState.error)
+                NewsErrorScreen(errorState.error.message.orEmpty())
             }
         }
 
@@ -147,27 +148,15 @@ private fun NewsArticleList(
 }
 
 @Composable
-fun NewsEmptyScreen() {
+private fun NewsEmptyScreen() {
     Text(
-        modifier = Modifier.padding(vertical = 10.dp),
+        modifier = Modifier
+            .padding(vertical = 10.dp)
+            .testTag(
+                NewsHomeScreenTestTags.NEWS_ARTICLE_EMPTY_SCREEN
+            ),
         text = stringResource(R.string.empty_result, Locale.getDefault().country),
         style = MaterialTheme.typography.titleLarge
-    )
-}
-
-@Composable
-fun NewsErrorScreen(exception: Throwable?) {
-    Text(
-        modifier = Modifier.padding(vertical = 10.dp),
-        text = stringResource(R.string.loading_error),
-        color = Color.Red,
-        style = MaterialTheme.typography.titleLarge
-    )
-    Text(
-        modifier = Modifier.padding(10.dp),
-        text = "Message: ${exception?.message}",
-        color = Color.Red.copy(alpha = 0.7f),
-        style = MaterialTheme.typography.titleMedium
     )
 }
 
@@ -179,6 +168,7 @@ private fun NewsArticleItem(
     val defaultPadding = 10.dp
     Card(modifier = Modifier
         .fillMaxWidth()
+        .testTag(NewsHomeScreenTestTags.NEWS_ARTICLE_ITEM_SCREEN)
         .padding(10.dp)
         .clickable {
             onArticleClicked(article)
@@ -209,7 +199,7 @@ private fun NewsArticleItem(
 
 @Preview
 @Composable
-fun NewsArticleItemPreview() {
+private fun NewsArticleItemPreview() {
     NewsArticleItem(
         NewsArticle(
             title = "Title",

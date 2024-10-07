@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.instantsystem.android.feature.news.R
 import com.instantsystem.android.feature.news.domain.model.NewsArticle
+import com.instantsystem.android.feature.news.ui.tag.NewsHomeScreenTestTags
 
 @Composable
 fun NewsArticleDetails(
@@ -59,6 +61,7 @@ fun NewsArticleDetails(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .testTag(NewsHomeScreenTestTags.NEWS_ARTICLE_DETAIL_SCREEN)
                     .verticalScroll(scrollState)
                     .padding(paddingValues),
                 verticalArrangement = Arrangement.Top,
