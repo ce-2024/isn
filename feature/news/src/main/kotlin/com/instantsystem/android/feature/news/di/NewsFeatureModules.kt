@@ -7,5 +7,6 @@ val newsFeatureModules = module {
         newsFeatureNetworkModule,
         newsFeatureDataModule,
         newsFeatureDomainModule,
+        newsFeatureViewModelModule
     )
 }

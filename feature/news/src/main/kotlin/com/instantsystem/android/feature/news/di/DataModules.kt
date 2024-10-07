@@ -7,7 +7,7 @@ import com.instantsystem.android.feature.news.data.repository.NewsRepository
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val newsFeatureDataModule = module {
+internal val newsFeatureDataModule = module {
     single<NewsApiService> { NewsRemoteApiService(get(named(NEWS_HTTP_CLIENT))) }
     single<NewsRepository> { NewsRemoteRepository(get()) }
 }

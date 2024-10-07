@@ -11,7 +11,7 @@ import org.koin.dsl.module
 const val NEWS_API_KEY = ""
 internal const val NEWS_HTTP_CLIENT = "newsHttpClient"
 
-val newsFeatureNetworkModule = module {
+internal val newsFeatureNetworkModule = module {
     // using core httpclient and overridden only needed configuration
     factory(named(NEWS_HTTP_CLIENT)) { provideMediaHttpClient(get(named(CORE_HTTP_CLIENT))) }
 }

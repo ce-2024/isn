@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="loading">Waiting for items to load from the backend</string>
+    <string name="article_link">Link:\n</string>
+</resources>
