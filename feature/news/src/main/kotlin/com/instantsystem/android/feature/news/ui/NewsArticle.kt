@@ -41,6 +41,7 @@ import coil.compose.AsyncImage
 import com.instantsystem.android.feature.news.R
 import com.instantsystem.android.feature.news.domain.model.NewsArticle
 import org.koin.compose.koinInject
+import java.util.Locale
 
 internal sealed class NewsState {
     data object NewsArticleScreenState : NewsState()
@@ -118,9 +119,15 @@ private fun NewsArticleList(
             }
         }
 
+        if (uiState.itemCount == 0 && uiState.loadState.refresh is LoadState.NotLoading) {
+            item {
+                NewsEmptyScreen()
+            }
+        }
+
         items(count = uiState.itemCount) { index ->
-            val item = uiState[index]
-            item?.let {
+            val newsArticle = uiState[index]
+            newsArticle?.let {
                 NewsArticleItem(it, onArticleClicked)
             }
         }
@@ -137,6 +144,15 @@ private fun NewsArticleList(
         }
     }
 
+}
+
+@Composable
+fun NewsEmptyScreen() {
+    Text(
+        modifier = Modifier.padding(vertical = 10.dp),
+        text = stringResource(R.string.empty_result, Locale.getDefault().country),
+        style = MaterialTheme.typography.titleLarge
+    )
 }
 
 @Composable

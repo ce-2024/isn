@@ -3,4 +3,5 @@
     <string name="loading">Waiting for items to load from the backend</string>
     <string name="article_link">Link:\n</string>
     <string name="loading_error">Some error happened!!</string>
+    <string name="empty_result">No articles for country : %s</string>
 </resources>
