@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.instantsystem.android.feature.news.domain.model.NewsArticle
 import kotlinx.parcelize.Parcelize
-import org.koin.compose.koinInject
+import org.koin.androidx.compose.koinViewModel
 
 /**
  * sealed class to distinguish between the two screens being displayed.
@@ -31,7 +31,7 @@ internal sealed class NewsState : Parcelable {
 
 @Composable
 fun NewsHomeScreen(modifier: Modifier = Modifier) {
-    val viewModel = koinInject<NewsViewModel>()
+    val viewModel = koinViewModel<NewsViewModel>()
     val articlesFlowState = viewModel.paginatedNewsFlow.collectAsLazyPagingItems()
     val listState = rememberLazyListState()
     var newsState by rememberSaveable {

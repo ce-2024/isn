@@ -1,5 +1,6 @@
 package com.instantsystem.android.feature.news.ui
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -11,8 +12,6 @@ import com.instantsystem.android.feature.news.domain.interactor.GetNewsPagingSou
 import com.instantsystem.android.feature.news.domain.interactor.GetNewsPagingSourceParam
 import com.instantsystem.android.feature.news.domain.model.NewsArticle
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.shareIn
 import java.util.Locale
 
 /**
@@ -20,8 +19,12 @@ import java.util.Locale
  * depends on [GetNewsPagingSource] to fetch news from server
  */
 class NewsViewModel(
+    savedStateHandle: SavedStateHandle,
     private val getTopHeadlinesPagingSource: GetNewsPagingSource,
 ) : ViewModel() {
+
+    private val country: String =
+        savedStateHandle.get<String>("country") ?: Locale.getDefault().country
 
     /**
      * Paging flow of news articles
@@ -31,7 +34,7 @@ class NewsViewModel(
         pagingSourceFactory = {
             getTopHeadlinesPagingSource(
                 GetNewsPagingSourceParam(
-                    country = Locale.getDefault().country
+                    country = country
                 )
             )
         }
@@ -39,6 +42,4 @@ class NewsViewModel(
         // this ensure the flow is cached in viewModel and prevent loading more data
         // when orientation changed
         .cachedIn(viewModelScope)
-        // try to keep this flow after 5 seconds of idle (screen orientation change)
-        .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), 1)
 }
