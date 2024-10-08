@@ -18,6 +18,6 @@ val newsDebugFeatureModules = module {
     factory { GetTopHeadlinesUseCase(get(), UnconfinedTestDispatcher()) }
     factory { GetTopHeadlinesUseCase(get(), UnconfinedTestDispatcher()) }
 
-    factory { GetNewsPagingSource(get()) }
+    single { GetNewsPagingSource(get()) }
     viewModel { NewsViewModel(get()) }
 }

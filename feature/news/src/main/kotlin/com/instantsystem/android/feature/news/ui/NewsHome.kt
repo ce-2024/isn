@@ -1,5 +1,6 @@
 package com.instantsystem.android.feature.news.ui
 
+import android.os.Parcelable
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -10,18 +11,20 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.instantsystem.android.feature.news.domain.model.NewsArticle
+import kotlinx.parcelize.Parcelize
 import org.koin.compose.koinInject
 
 /**
  * sealed class to distinguish between the two screens being displayed.
  * the NewsArticlesListScreen and NewsArticleDetailScreenState
  */
-internal sealed class NewsState {
+@Parcelize
+internal sealed class NewsState : Parcelable {
     data object NewsArticlesListScreenState : NewsState()
     data class NewsArticleDetailScreenState(val article: NewsArticle) : NewsState()
 }
@@ -31,7 +34,7 @@ fun NewsHomeScreen(modifier: Modifier = Modifier) {
     val viewModel = koinInject<NewsViewModel>()
     val articlesFlowState = viewModel.paginatedNewsFlow.collectAsLazyPagingItems()
     val listState = rememberLazyListState()
-    var newsState by remember {
+    var newsState by rememberSaveable {
         mutableStateOf<NewsState>(NewsState.NewsArticlesListScreenState)
     }
 

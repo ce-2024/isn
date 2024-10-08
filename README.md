@@ -62,5 +62,4 @@ to be able to load News and run different test.
 
 [Handle Server Error Max Request](art/error_max_request_response.mp4)
 
-
 [Handle Server Error No API Key](art/error_no_api_key_server.mp4)

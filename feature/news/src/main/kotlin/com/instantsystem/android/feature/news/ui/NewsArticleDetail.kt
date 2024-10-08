@@ -19,6 +19,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,6 +49,7 @@ fun NewsArticleDetailScreen(
     article: NewsArticle,
     onBackPressed: () -> Unit = {}
 ) {
+    val currentArticle by rememberSaveable { mutableStateOf(article) }
     val scrollState = rememberScrollState()
     val uriHandler = LocalUriHandler.current
     val defaultPadding = 10.dp
@@ -78,13 +82,13 @@ fun NewsArticleDetailScreen(
                         .fillMaxWidth()
                         .padding(defaultPadding),
                     style = MaterialTheme.typography.headlineLarge,
-                    text = article.title
+                    text = currentArticle.title
                 )
                 AsyncImage(
                     modifier = Modifier
                         .requiredHeight(350.dp)
                         .padding(defaultPadding),
-                    model = article.urlToImage,
+                    model = currentArticle.urlToImage,
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                 )
@@ -93,14 +97,14 @@ fun NewsArticleDetailScreen(
                         .fillMaxWidth()
                         .weight(1f)
                         .padding(defaultPadding),
-                    text = article.description,
+                    text = currentArticle.description,
                     style = MaterialTheme.typography.bodyMedium
                 )
 
                 Text(
                     modifier = Modifier
                         .clickable {
-                            uriHandler.openUri(article.url)
+                            uriHandler.openUri(currentArticle.url)
                         }
                         .padding(defaultPadding)
                         .fillMaxWidth(),
@@ -109,7 +113,7 @@ fun NewsArticleDetailScreen(
                     text = buildAnnotatedString {
                         append(stringResource(R.string.article_link))
                         pushStyle(SpanStyle(color = Color.Blue))
-                        append(article.url)
+                        append(currentArticle.url)
                         toAnnotatedString()
                     }
                 )
