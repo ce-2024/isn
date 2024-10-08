@@ -65,10 +65,12 @@ to be able to load News and run different test.
 # Demo
 
 ## Handle Server Error Max Request
-[error_max_request_response.mp4](art/error_max_request_response.mp4)
+https://github.com/user-attachments/assets/262cf08f-f841-44d0-8c86-15efe97cce2c
 
 ## Handle Server Error No API Key
-[error_no_api_key_server.mp4](art/error_no_api_key_server.mp4)
+https://github.com/user-attachments/assets/b4688576-c312-4abc-be4b-28ef9a89d043
 
 ## fetch data with pagination
-[fetch_data_using_pagination.mp4](art/fetch_data_using_paggination.mp4)
+https://github.com/user-attachments/assets/c5e1a707-461f-47a5-96e7-97153d5e9946
+
+
