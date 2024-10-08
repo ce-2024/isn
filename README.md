@@ -51,9 +51,16 @@ to be able to load News and run different test.
 - use io.ktor:ktor-client-mock to mock all server response and tune more all application code
 - Check if there is an other way to
   take [default Locale from device](https://developer.android.com/guide/topics/resources/multilingual-support)
-- Debug the strange behavior of Flow<PagingData<T>> when screen rotate (new call to server) even if it
-cached in viewModel and use internally remember ?!! (My first exprience with Pager 3)
-- Enhance more Ui : 
-  - [Adaptive Ui](https://developer.android.com/develop/ui/compose/layouts/adaptive/build-adaptive-navigation)
-  - Move common Composable inside core:designsystem 
+- Debug the strange behavior of Flow<PagingData<T>> when screen rotate (new call to server) even if
+  it
+  cached in viewModel and use internally remember ?!! (My first exprience with Pager 3)
+- Enhance more Ui :
+    - [Adaptive Ui](https://developer.android.com/develop/ui/compose/layouts/adaptive/build-adaptive-navigation)
+    - Move common Composable inside core:designsystem
 
+# Demo
+
+[Handle Server Error Max Request](art/error_max_request_response.webm)
+
+
+[Handle Server Error No API Key](art/error_no_api_key_server.webm)
