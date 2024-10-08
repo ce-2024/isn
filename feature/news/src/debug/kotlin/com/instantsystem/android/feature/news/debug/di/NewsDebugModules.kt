@@ -8,10 +8,16 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
+/**
+ * Debug module to replace all IoDispatcher by an unconfined dispatcher for debug purpose
+ */
 @OptIn(ExperimentalCoroutinesApi::class)
 val newsDebugFeatureModules = module {
+
+    // replace all IoDispatcher by an unconfined dispatcher for debug purpose
     factory { GetTopHeadlinesUseCase(get(), UnconfinedTestDispatcher()) }
     factory { GetTopHeadlinesUseCase(get(), UnconfinedTestDispatcher()) }
+
     factory { GetNewsPagingSource(get()) }
     viewModel { NewsViewModel(get()) }
 }

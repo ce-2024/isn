@@ -4,9 +4,12 @@ import kotlinx.coroutines.Dispatchers
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+const val IO_DISPATCHER = "IoDispatcher"
+const val DEFAULT_DISPATCHER = "DefaultDispatcher"
+const val MAIN_DISPATCHER = "MainDispatcher"
 
 val commonDispatcherModule = module {
-    single(named("IoDispatcher")) { Dispatchers.IO }
-    single(named("DefaultDispatcher")) { Dispatchers.Default }
-    single(named("MainDispatcher")) { Dispatchers.Main }
+    single(named(IO_DISPATCHER)) { Dispatchers.IO }
+    single(named(DEFAULT_DISPATCHER)) { Dispatchers.Default }
+    single(named(MAIN_DISPATCHER)) { Dispatchers.Main }
 }

@@ -18,8 +18,12 @@ import com.instantsystem.android.feature.news.R
 import com.instantsystem.android.feature.news.ui.tag.NewsHomeScreenTestTags
 
 
+/**
+ * Display error message
+ * @param message message to show
+ */
 @Composable
-fun NewsErrorScreen(exceptionMsg: String) {
+fun NewsErrorScreen(message: String) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -37,7 +41,7 @@ fun NewsErrorScreen(exceptionMsg: String) {
         )
         Text(
             modifier = Modifier.padding(10.dp),
-            text = "Message: $exceptionMsg",
+            text = stringResource(R.string.news_error_message, message),
             color = Color.Red.copy(alpha = 0.7f),
             style = MaterialTheme.typography.titleMedium
         )

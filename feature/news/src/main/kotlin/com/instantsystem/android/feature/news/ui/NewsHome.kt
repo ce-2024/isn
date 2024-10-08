@@ -1,0 +1,64 @@
+package com.instantsystem.android.feature.news.ui
+
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.instantsystem.android.feature.news.domain.model.NewsArticle
+import org.koin.compose.koinInject
+
+/**
+ * sealed class to distinguish between the two screens being displayed.
+ * the NewsArticlesListScreen and NewsArticleDetailScreenState
+ */
+internal sealed class NewsState {
+    data object NewsArticlesListScreenState : NewsState()
+    data class NewsArticleDetailScreenState(val article: NewsArticle) : NewsState()
+}
+
+@Composable
+fun NewsHomeScreen(modifier: Modifier = Modifier) {
+    val viewModel = koinInject<NewsViewModel>()
+    val articlesFlowState = viewModel.paginatedNewsFlow.collectAsLazyPagingItems()
+    val listState = rememberLazyListState()
+    var newsState by remember {
+        mutableStateOf<NewsState>(NewsState.NewsArticlesListScreenState)
+    }
+
+    // we will use animated content as we have all information to build
+    // NewsArticles and NewsArticleDetail
+    AnimatedContent(
+        modifier = modifier,
+        targetState = newsState,
+        label = "News List and details",
+        transitionSpec = {
+            fadeIn() + slideInVertically(animationSpec = tween(400),
+                initialOffsetY = { fullHeight -> fullHeight }) togetherWith
+                    fadeOut(animationSpec = tween(200))
+        }
+    ) { targetState ->
+        when (targetState) {
+            NewsState.NewsArticlesListScreenState -> {
+                NewsArticlesListScreen(articlesFlowState, listState) {
+                    newsState = NewsState.NewsArticleDetailScreenState(it)
+                }
+            }
+
+            is NewsState.NewsArticleDetailScreenState -> {
+                NewsArticleDetailScreen(article = targetState.article) {
+                    newsState = NewsState.NewsArticlesListScreenState
+                }
+            }
+        }
+    }
+}

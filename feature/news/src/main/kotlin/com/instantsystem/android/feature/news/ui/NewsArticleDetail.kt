@@ -36,8 +36,13 @@ import com.instantsystem.android.feature.news.R
 import com.instantsystem.android.feature.news.domain.model.NewsArticle
 import com.instantsystem.android.feature.news.ui.tag.NewsHomeScreenTestTags
 
+/**
+ * Display News Article detail screen
+ * @param article: Article to show
+ * @param onBackPressed : handle back press to return to list of news articles
+ */
 @Composable
-fun NewsArticleDetails(
+fun NewsArticleDetailScreen(
     article: NewsArticle,
     onBackPressed: () -> Unit = {}
 ) {
@@ -115,14 +120,11 @@ fun NewsArticleDetails(
 
 @Preview
 @Composable
-private fun NewsArticleDetailScreenPreview() {
-
-    NewsArticleDetails(
-        NewsArticle(
-            title = "Title",
-            description = stringResource(R.string.big_text_description),
-            url = "Url",
-            urlToImage = "UrlToImage"
-        )
+private fun NewsArticleDetailScreenPreview() = NewsArticleDetailScreen(
+    NewsArticle(
+        title = "Title",
+        description = stringResource(R.string.big_text_description),
+        url = "Url",
+        urlToImage = "UrlToImage"
     )
-}
+)

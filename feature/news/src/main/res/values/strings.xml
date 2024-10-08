@@ -4,4 +4,5 @@
     <string name="article_link">Link:\n</string>
     <string name="loading_error">Some error happened!!</string>
     <string name="empty_result">No articles for country : %s</string>
+    <string name="news_error_message">Message: %s</string>
 </resources>

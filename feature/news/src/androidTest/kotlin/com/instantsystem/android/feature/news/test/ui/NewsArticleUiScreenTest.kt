@@ -6,7 +6,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.platform.app.InstrumentationRegistry
-import com.instantsystem.android.feature.news.ui.NewsArticleScreen
+import com.instantsystem.android.feature.news.ui.NewsHomeScreen
 import com.instantsystem.android.feature.news.ui.tag.NewsHomeScreenTestTags
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -32,7 +32,7 @@ class NewsArticleUiScreenTest : KoinTest {
     @Test
     fun test_news_app_given_country_us_assert_empty_list_articles() = runTest {
         composeTestRule.setContent {
-            NewsArticleScreen()
+            NewsHomeScreen()
         }
         composeTestRule.onNodeWithTag(
             NewsHomeScreenTestTags.NEWS_ARTICLE_ITEM_SCREEN
@@ -44,7 +44,7 @@ class NewsArticleUiScreenTest : KoinTest {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         setLocale(context, Locale("zyw"))
         composeTestRule.setContent {
-            NewsArticleScreen()
+            NewsHomeScreen()
         }
 
         composeTestRule.onNodeWithTag(
@@ -55,7 +55,7 @@ class NewsArticleUiScreenTest : KoinTest {
     @Test
     fun test_news_app_given_max_request_response_assert_news_error_displayed() = runTest {
         composeTestRule.setContent {
-            NewsArticleScreen()
+            NewsHomeScreen()
         }
 
         Thread.sleep(2000)

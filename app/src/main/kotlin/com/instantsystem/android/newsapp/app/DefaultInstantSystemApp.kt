@@ -13,12 +13,19 @@ class DefaultInstantSystemApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        /**
+         * Load Koin to manage dependency injection
+         */
         startKoin {
             androidLogger()
             androidContext(applicationContext)
+            // common module dependencies
             modules(commonDispatcherModule)
+            // core module dependencies
             modules(coreNetworkModule)
+            // app module dependencies
             modules(appModules)
+            // feature module dependencies
             modules(newsFeatureModules)
         }
     }
