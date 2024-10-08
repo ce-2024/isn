@@ -58,10 +58,17 @@ to be able to load News and run different test.
     - [Adaptive Ui](https://developer.android.com/develop/ui/compose/layouts/adaptive/build-adaptive-navigation)
     - Move common Composable inside core:designsystem
 
+- Add offline support (database)
+- Add check network connectivity
+- Add SplashScreen
+
 # Demo
 
-[Handle Server Error Max Request](art/error_max_request_response.mp4)
+## Handle Server Error Max Request
+art/error_max_request_response.mp4
 
-[Handle Server Error No API Key](art/error_no_api_key_server.mp4)
+## Handle Server Error No API Key
+art/error_no_api_key_server.mp4
 
-[fetch data with pagination](art/fetch_data_using_paggination.mp4)
+## fetch data with pagination
+art/fetch_data_using_paggination.mp4
