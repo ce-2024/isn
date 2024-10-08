@@ -12,7 +12,8 @@ import com.instantsystem.android.feature.news.domain.interactor.GetNewsPagingSou
 import com.instantsystem.android.feature.news.domain.model.NewsArticle
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.shareIn
 import java.util.Locale
 
 /**
@@ -40,5 +41,6 @@ class NewsViewModel(
         // this ensure the flow is cached in viewModel and prevent loading more data
         // when orientation changed
         .cachedIn(viewModelScope)
-        .debounce(5000)
+        // try to keep this flow after 5 seconds of idle (screen orientation change)
+        .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), 1)
 }

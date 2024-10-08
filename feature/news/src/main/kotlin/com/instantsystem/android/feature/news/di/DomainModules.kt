@@ -9,5 +9,5 @@ import org.koin.dsl.module
 
 internal val newsFeatureDomainModule = module {
     factory { GetTopHeadlinesUseCase(get(), get(named(IO_DISPATCHER))) }
-    factory { GetNewsPagingSource(get()) }
+    single { GetNewsPagingSource(get()) }
 }
