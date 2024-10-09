@@ -41,10 +41,11 @@ using [NewsApi](https://newsapi.org/docs/endpoints/top-headlines) Rest API.
 
 # Build & Run
 
-You need to get an APIKEY from [NewsApi](https://newsapi.org/docs/endpoints/top-headlines)
-Replace NEWS_API_KEY in
-file [NewsNetworkModule.kt](feature/news/src/main/kotlin/com/instantsystem/android/feature/news/di/NewsNetworkModule.kt)
-to be able to load News and run different test.
+You need to get an APIKEY from [newsapi.org](https://newsapi.org/docs/endpoints/top-headlines)
+
+Set the API key in your local.properties file under your root project as follows:
+
+    NEWS_API_KEY=XXXXXXXXXXXXXXXXX
 
 # TODO
 
@@ -53,7 +54,7 @@ to be able to load News and run different test.
   take [default Locale from device](https://developer.android.com/guide/topics/resources/multilingual-support)
 - Enhance more Ui :
     - [Adaptive Ui](https://developer.android.com/develop/ui/compose/layouts/adaptive/build-adaptive-navigation)
-    - Move common Composable inside core:designsystem
+    - Move common Composable inside core:designsystem module
 
 - Add offline support (database)
 - Add check network connectivity
@@ -62,12 +63,15 @@ to be able to load News and run different test.
 # Demo
 
 ## Handle Server Error Max Request
+
 https://github.com/user-attachments/assets/262cf08f-f841-44d0-8c86-15efe97cce2c
 
 ## Handle Server Error No API Key
+
 https://github.com/user-attachments/assets/b4688576-c312-4abc-be4b-28ef9a89d043
 
 ## fetch data with pagination
+
 https://github.com/user-attachments/assets/c5e1a707-461f-47a5-96e7-97153d5e9946
 
 

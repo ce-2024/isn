@@ -1,15 +1,13 @@
 package com.instantsystem.android.feature.news.di
 
 import com.instantsystem.android.core.network.di.CORE_HTTP_CLIENT
+import com.instantsystem.android.feature.news.BuildConfig
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.request.header
 import io.ktor.http.HttpHeaders
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-
-//TODO put here the API KEY for https://newsapi.org
-const val NEWS_API_KEY = ""
 
 // News feature http client name
 internal const val NEWS_HTTP_CLIENT = "newsHttpClient"
@@ -26,7 +24,7 @@ internal val newsFeatureNetworkModule = module {
 private fun provideMediaHttpClient(coreHttpClient: HttpClient): HttpClient {
     return coreHttpClient.config {
         install(DefaultRequest) {
-            header(HttpHeaders.Authorization, NEWS_API_KEY)
+            header(HttpHeaders.Authorization, BuildConfig.NEWS_API_KEY)
         }
     }
 }

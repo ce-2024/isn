@@ -1,12 +1,12 @@
 package com.instantsystem.android.feature.news.test
 
+import com.instantsystem.android.feature.news.BuildConfig
 import com.instantsystem.android.feature.news.data.api.NewsApiService
 import com.instantsystem.android.feature.news.data.api.NewsApiService.Companion.SUCCESS_SERVER_RESULT_RESPONSE
 import com.instantsystem.android.feature.news.data.api.NewsRemoteApiService
 import com.instantsystem.android.feature.news.data.entity.TopHeadlinesRequest
 import com.instantsystem.android.feature.news.data.repository.NewsRemoteRepository
 import com.instantsystem.android.feature.news.data.repository.NewsRepository
-import com.instantsystem.android.feature.news.di.NEWS_API_KEY
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.DefaultRequest
@@ -38,7 +38,7 @@ class NewsRemoteRepositoryTest : KoinTest {
             }
             if (isApiEnabled) {
                 install(DefaultRequest) {
-                    header(HttpHeaders.Authorization, NEWS_API_KEY)
+                    header(HttpHeaders.Authorization, BuildConfig.NEWS_API_KEY)
                 }
             }
         }
