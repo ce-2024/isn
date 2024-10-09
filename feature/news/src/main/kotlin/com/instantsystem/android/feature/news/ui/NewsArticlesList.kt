@@ -48,51 +48,64 @@ fun NewsArticlesListScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        if (savedPagingItems.loadState.refresh == LoadState.Loading) {
-            item {
-                Text(
-                    text = stringResource(R.string.loading),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                )
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                )
+
+        when (savedPagingItems.loadState.refresh) {
+            is LoadState.Loading -> {
+                item {
+                    Text(
+                        text = stringResource(R.string.loading),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(Alignment.CenterHorizontally)
+                    )
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp)
+                            .wrapContentWidth(Alignment.CenterHorizontally)
+                    )
+                }
+
+            }
+
+            is LoadState.Error -> {
+                val errorState = savedPagingItems.loadState.refresh as LoadState.Error
+                item {
+                    NewsErrorScreen(errorState.error.message.orEmpty())
+                }
+            }
+
+            else -> {
+                if (savedPagingItems.itemCount == 0)
+                    item {
+                        NewsEmptyScreen()
+                    }
             }
         }
 
-        if (savedPagingItems.loadState.refresh is LoadState.Error) {
-            val errorState = savedPagingItems.loadState.refresh as LoadState.Error
-            item {
-                NewsErrorScreen(errorState.error.message.orEmpty())
+        when (savedPagingItems.loadState.append) {
+            is LoadState.Loading -> {
+                item {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 25.dp)
+                            .wrapContentWidth(Alignment.CenterHorizontally)
+                    )
+                }
             }
-        }
 
-        if (savedPagingItems.itemCount == 0 && savedPagingItems.loadState.refresh is LoadState.NotLoading) {
-            item {
-                NewsEmptyScreen()
+            is LoadState.Error -> {
+                //TODO add a button to retry op.
             }
+
+            else -> {}
         }
 
         items(count = savedPagingItems.itemCount) { index ->
             val newsArticle = savedPagingItems[index]
             newsArticle?.let {
                 NewsArticleItem(it, onArticleClicked)
-            }
-        }
-
-        if (savedPagingItems.loadState.append == LoadState.Loading) {
-            item {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 25.dp)
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                )
             }
         }
     }
