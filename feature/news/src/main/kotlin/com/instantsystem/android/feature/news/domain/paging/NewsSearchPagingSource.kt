@@ -3,13 +3,13 @@ package com.instantsystem.android.feature.news.domain.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.instantsystem.android.feature.news.data.api.NewsApiService.Companion.SUCCESS_SERVER_RESULT_RESPONSE
-import com.instantsystem.android.feature.news.data.entity.TopHeadlinesRequest
+import com.instantsystem.android.feature.news.data.entity.SearchEverythingRequest
 import com.instantsystem.android.feature.news.data.repository.NewsRepository
 import com.instantsystem.android.feature.news.domain.model.NewsArticle
 import com.instantsystem.android.feature.news.toDomain
 
-class NewsPagingSource(
-    private val country: String,
+class NewsSearchPagingSource(
+    private val request: SearchEverythingRequest,
     private val repository: NewsRepository
 ) : PagingSource<Int, NewsArticle>() {
 
@@ -23,13 +23,7 @@ class NewsPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NewsArticle> {
         return try {
             val nextPageNumber = params.key ?: 1
-            val response = repository.topHeadlines(
-                TopHeadlinesRequest(
-                    page = nextPageNumber,
-                    pageSize = params.loadSize,
-                    country = country
-                )
-            )
+            val response = repository.everything(request)
             if (response?.status != SUCCESS_SERVER_RESULT_RESPONSE) {
                 LoadResult.Error(Exception(response?.message))
             } else
