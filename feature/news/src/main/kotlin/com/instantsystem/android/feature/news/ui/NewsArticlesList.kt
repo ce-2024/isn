@@ -1,5 +1,7 @@
 package com.instantsystem.android.feature.news.ui
 
+import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
+import com.instantsystem.android.core.designsystem.theme.InstantSystemNewsTheme
 import com.instantsystem.android.feature.news.R
 import com.instantsystem.android.feature.news.domain.model.NewsArticle
 import com.instantsystem.android.feature.news.ui.tag.NewsHomeScreenTestTags
@@ -41,10 +45,10 @@ fun NewsArticlesListScreen(
     listState: LazyListState,
     onArticleClicked: (NewsArticle) -> Unit = {}
 ) {
-
     LazyColumn(
         state = listState,
         modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -84,6 +88,13 @@ fun NewsArticlesListScreen(
             }
         }
 
+        items(count = savedPagingItems.itemCount) { index ->
+            val newsArticle = savedPagingItems[index]
+            newsArticle?.let {
+                NewsArticleItem(it, onArticleClicked)
+            }
+        }
+
         when (savedPagingItems.loadState.append) {
             is LoadState.Loading -> {
                 item {
@@ -102,13 +113,6 @@ fun NewsArticlesListScreen(
 
             else -> {}
         }
-
-        items(count = savedPagingItems.itemCount) { index ->
-            val newsArticle = savedPagingItems[index]
-            newsArticle?.let {
-                NewsArticleItem(it, onArticleClicked)
-            }
-        }
     }
 }
 
@@ -120,33 +124,45 @@ private fun NewsArticleItem(
     val defaultPadding = 10.dp
     Card(
         modifier = Modifier
-            .fillMaxWidth()
             .testTag(NewsHomeScreenTestTags.NEWS_ARTICLE_ITEM_SCREEN)
             .padding(10.dp)
             .clickable {
                 onArticleClicked(article)
             }
     ) {
+        Text(
+            text = stringResource(R.string.published_at, article.publishedAt),
+            modifier = Modifier
+                .padding(6.dp),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.labelSmall,
+        )
 
         Text(
             text = article.title,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(defaultPadding),
+                .padding(horizontal = defaultPadding),
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.titleLarge,
         )
         AsyncImage(
             modifier = Modifier
-                .fillMaxWidth()
-                .requiredHeight(350.dp)
-                .fillMaxWidth()
+                .requiredHeight(256.dp)
                 .padding(defaultPadding)
-                .clip(RoundedCornerShape(12.dp)),
+                .clip(RoundedCornerShape(8.dp)),
             model = article.urlToImage,
             contentDescription = null,
             contentScale = ContentScale.Crop,
+        )
+        Text(
+            text = article.description,
+            modifier = Modifier
+                .padding(defaultPadding),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.bodyMedium,
         )
     }
 }
@@ -164,16 +180,30 @@ private fun NewsEmptyScreen() {
     )
 }
 
-
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark"
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight"
+)
 @Composable
 private fun NewsArticleItemPreview() {
-    NewsArticleItem(
-        NewsArticle(
-            title = "Title",
-            description = "",
-            url = "",
-            urlToImage = "UrlToImage"
-        )
-    )
+    InstantSystemNewsTheme {
+        Surface {
+            NewsArticleItem(
+                NewsArticle(
+                    publishedAt = "publishedAt",
+                    author = "author",
+                    source = "source",
+                    title = "Title",
+                    description = "description",
+                    url = "url",
+                    urlToImage = "UrlToImage",
+                    content = "The unformatted content of the article",
+                )
+            )
+        }
+    }
 }

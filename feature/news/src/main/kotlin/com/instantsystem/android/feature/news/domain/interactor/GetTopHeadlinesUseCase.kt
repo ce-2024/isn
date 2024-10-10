@@ -33,6 +33,10 @@ fun TopHeadlinesResponse.toModel(): List<NewsArticle> = articles.map {
         title = it.title.orEmpty(),
         description = it.description.orEmpty(),
         url = it.url.orEmpty(),
-        urlToImage = it.urlToImage.orEmpty()
+        urlToImage = it.urlToImage.orEmpty(),
+        content = it.content?.take(200).orEmpty(),
+        author = it.author.orEmpty(),
+        publishedAt = it.publishedAt.orEmpty(),
+        source = it.source?.name.orEmpty()
     )
 }

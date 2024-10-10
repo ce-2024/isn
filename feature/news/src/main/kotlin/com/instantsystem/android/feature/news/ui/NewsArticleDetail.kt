@@ -1,5 +1,6 @@
 package com.instantsystem.android.feature.news.ui
 
+import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +29,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -75,6 +77,20 @@ fun NewsArticleDetailScreen(
                 text = currentArticle.title
             )
         }
+        Text(
+            text = stringResource(R.string.published_at, article.publishedAt),
+            modifier = Modifier.padding(6.dp),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.labelSmall,
+        )
+        Text(
+            text = stringResource(R.string.article_source, article.source),
+            modifier = Modifier.padding(6.dp),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.labelSmall,
+        )
         AsyncImage(
             modifier = Modifier
                 .fillMaxWidth()
@@ -88,8 +104,8 @@ fun NewsArticleDetailScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(defaultPadding),
-            text = currentArticle.description,
-            style = MaterialTheme.typography.headlineMedium
+            text = currentArticle.content,
+            style = MaterialTheme.typography.bodyMedium
         )
         Button(
             modifier = Modifier
@@ -103,7 +119,14 @@ fun NewsArticleDetailScreen(
     }
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark"
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight"
+)
 @Composable
 private fun NewsArticleDetailScreenPreview() {
     InstantSystemNewsTheme {
@@ -111,9 +134,13 @@ private fun NewsArticleDetailScreenPreview() {
             NewsArticleDetailScreen(
                 NewsArticle(
                     title = "Title",
-                    description = stringResource(R.string.big_text_description),
+                    description = "description",
                     url = "Url",
-                    urlToImage = "UrlToImage"
+                    urlToImage = "UrlToImage",
+                    content = stringResource(R.string.big_text_description),
+                    author = "author",
+                    publishedAt = "publishedAt",
+                    source = "source"
                 )
             )
         }

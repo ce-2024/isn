@@ -4,10 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.instantsystem.android.core.designsystem.theme.InstantSystemNewsTheme
 import com.instantsystem.android.feature.news.ui.NewsHomeScreen
 
@@ -17,8 +18,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             InstantSystemNewsTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    NewsHomeScreen(modifier = Modifier.padding(innerPadding))
+                Surface(tonalElevation = 5.dp) {
+                    Scaffold { paddingValue ->
+                        NewsHomeScreen(modifier = Modifier.padding(paddingValue))
+                    }
                 }
             }
         }
