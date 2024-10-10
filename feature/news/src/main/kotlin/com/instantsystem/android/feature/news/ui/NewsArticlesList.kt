@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -16,10 +17,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -117,30 +118,32 @@ private fun NewsArticleItem(
     onArticleClicked: (NewsArticle) -> Unit = {}
 ) {
     val defaultPadding = 10.dp
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .testTag(NewsHomeScreenTestTags.NEWS_ARTICLE_ITEM_SCREEN)
-        .padding(10.dp)
-        .clickable {
-            onArticleClicked(article)
-        }) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag(NewsHomeScreenTestTags.NEWS_ARTICLE_ITEM_SCREEN)
+            .padding(10.dp)
+            .clickable {
+                onArticleClicked(article)
+            }
+    ) {
 
         Text(
             text = article.title,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(defaultPadding),
-            textAlign = TextAlign.Center,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.headlineLarge,
+            style = MaterialTheme.typography.titleLarge,
         )
         AsyncImage(
             modifier = Modifier
                 .fillMaxWidth()
                 .requiredHeight(350.dp)
                 .fillMaxWidth()
-                .padding(defaultPadding),
+                .padding(defaultPadding)
+                .clip(RoundedCornerShape(12.dp)),
             model = article.urlToImage,
             contentDescription = null,
             contentScale = ContentScale.Crop,
@@ -162,7 +165,7 @@ private fun NewsEmptyScreen() {
 }
 
 
-@Preview
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun NewsArticleItemPreview() {
     NewsArticleItem(
