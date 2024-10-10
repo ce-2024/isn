@@ -10,8 +10,16 @@ import androidx.paging.cachedIn
 import com.instantsystem.android.feature.news.data.api.NewsApiService.Companion.MAX_PER_PAGE
 import com.instantsystem.android.feature.news.domain.interactor.GetNewsPagingSource
 import com.instantsystem.android.feature.news.domain.interactor.GetNewsPagingSourceParam
+import com.instantsystem.android.feature.news.domain.interactor.SearchNewsUseCase
+import com.instantsystem.android.feature.news.domain.interactor.SearchQuery
 import com.instantsystem.android.feature.news.domain.model.NewsArticle
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.update
 import java.util.Locale
 
 /**
@@ -21,10 +29,40 @@ import java.util.Locale
 class NewsViewModel(
     savedStateHandle: SavedStateHandle,
     private val getTopHeadlinesPagingSource: GetNewsPagingSource,
+    private val getSearchNewsPagingSource: SearchNewsUseCase
 ) : ViewModel() {
 
     private val country: String =
         savedStateHandle.get<String>("country") ?: Locale.getDefault().country
+
+    private val _searchQueryUiState = MutableStateFlow(SearchQueryUiState())
+    val searchQueryUiState = _searchQueryUiState.asStateFlow()
+
+    fun onSearchQueryChanged(query: String) {
+        _searchQueryUiState.update {
+            it.copy(
+                isSearching = query.isNotBlank(),
+                query = query
+            )
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val pagingSearchResults = _searchQueryUiState.flatMapLatest { query ->
+        if (query.query.isEmpty()) return@flatMapLatest emptyFlow()
+        Pager(
+            config = PagingConfig(pageSize = MAX_PER_PAGE, enablePlaceholders = true),
+            pagingSourceFactory = {
+                getSearchNewsPagingSource(
+                    SearchQuery(
+                        query = query.query,
+                        searchIn = query.searchIn,
+                        language = query.language
+                    )
+                )
+            }
+        ).flow.cachedIn(viewModelScope)
+    }
 
     /**
      * Paging flow of news articles
@@ -43,3 +81,10 @@ class NewsViewModel(
         // when orientation changed
         .cachedIn(viewModelScope)
 }
+
+data class SearchQueryUiState(
+    val isSearching: Boolean = false,
+    val query: String = "",
+    val searchIn: String = "",
+    val language: String = "",
+)

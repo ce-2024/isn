@@ -1,15 +1,18 @@
 package com.instantsystem.android.feature.news.data.api
 
+import com.instantsystem.android.feature.news.data.entity.SearchEverythingRequest
 import com.instantsystem.android.feature.news.data.entity.TopHeadlinesRequest
 import com.instantsystem.android.feature.news.data.entity.TopHeadlinesResponse
 
 interface NewsApiService {
 
     suspend fun topHeadlines(topHeadlinesRequest: TopHeadlinesRequest): TopHeadlinesResponse?
+    suspend fun everything(searchEverythingRequest: SearchEverythingRequest): TopHeadlinesResponse?
 
     companion object {
         private const val BASE_URL = "https://newsapi.org"
         internal const val TOP_HEADLINES = "$BASE_URL/v2/top-headlines"
+        internal const val EVERYTHING = "$BASE_URL/v2/everything"
 
         // Pagination
         internal const val PAGE = "page"

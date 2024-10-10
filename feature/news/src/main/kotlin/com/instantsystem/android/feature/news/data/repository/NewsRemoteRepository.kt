@@ -1,6 +1,7 @@
 package com.instantsystem.android.feature.news.data.repository
 
 import com.instantsystem.android.feature.news.data.api.NewsApiService
+import com.instantsystem.android.feature.news.data.entity.SearchEverythingRequest
 import com.instantsystem.android.feature.news.data.entity.TopHeadlinesRequest
 import com.instantsystem.android.feature.news.data.entity.TopHeadlinesResponse
 
@@ -11,5 +12,9 @@ class NewsRemoteRepository(
 
     override suspend fun topHeadlines(topHeadlinesRequest: TopHeadlinesRequest): TopHeadlinesResponse? {
         return apiService.topHeadlines(topHeadlinesRequest)
+    }
+
+    override suspend fun everything(searchEverythingRequest: SearchEverythingRequest): TopHeadlinesResponse? {
+        return apiService.everything(searchEverythingRequest)
     }
 }

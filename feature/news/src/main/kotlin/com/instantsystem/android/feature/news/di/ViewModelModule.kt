@@ -8,6 +8,6 @@ import org.koin.dsl.module
 
 internal val newsFeatureViewModelModule = module {
     viewModel { (savedStateHandle: SavedStateHandle) ->
-        NewsViewModel(savedStateHandle, get())
+        NewsViewModel(savedStateHandle, get(), get())
     }
 }
