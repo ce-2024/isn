@@ -23,7 +23,12 @@ class NewsSearchPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NewsArticle> {
         return try {
             val nextPageNumber = params.key ?: 1
-            val response = repository.everything(request)
+            val response = repository.everything(
+                request.copy(
+                    page = nextPageNumber,
+                    pageSize = params.loadSize
+                )
+            )
             if (response?.status != SUCCESS_SERVER_RESULT_RESPONSE) {
                 LoadResult.Error(Exception(response?.message))
             } else

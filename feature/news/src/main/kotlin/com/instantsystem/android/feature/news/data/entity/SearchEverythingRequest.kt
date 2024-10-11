@@ -24,7 +24,7 @@ data class SearchEverythingRequest(
     // The number of results to return per page. Default: 100. Maximum: 100
     val pageSize: Int = 5,
     // Use this to page through the results. Default: 1
-    val page: Int? = 1,
+    val page: Int = 1,
 )
 
 fun SearchEverythingRequest.toQueryParameters(): String {
@@ -39,5 +39,7 @@ fun SearchEverythingRequest.toQueryParameters(): String {
         "sortBy" to sortBy,
         "pageSize" to pageSize.toString(),
         "page" to page.toString(),
-    ).joinToString("&") { (key, value) -> "$key=$value" }
+    ).filter {
+        it.second.isNotEmpty()
+    }.joinToString("&") { (key, value) -> "$key=$value" }
 }
