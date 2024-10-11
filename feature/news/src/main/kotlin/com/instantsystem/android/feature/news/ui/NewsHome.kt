@@ -34,8 +34,7 @@ internal sealed class NewsState : Parcelable {
 @Composable
 fun NewsHomeScreen(modifier: Modifier = Modifier) {
     val viewModel = koinViewModel<NewsViewModel>()
-    val articlesFlowState = viewModel.paginatedNewsFlow.collectAsLazyPagingItems()
-    val searchResultsFlowState = viewModel.pagingSearchResults.collectAsLazyPagingItems()
+    val articlesFlowState = viewModel.newsPagingResults.collectAsLazyPagingItems()
     val listState = rememberLazyListState()
     var newsState by rememberSaveable {
         mutableStateOf<NewsState>(NewsState.NewsArticlesListScreenState)
@@ -57,13 +56,10 @@ fun NewsHomeScreen(modifier: Modifier = Modifier) {
         when (targetState) {
             NewsState.NewsArticlesListScreenState -> {
                 Column {
-                    NewsSearchBox(searchQueryUiState.query) { query ->
+                    NewsSearchBoxScreen(searchQueryUiState) { query ->
                         viewModel.onSearchQueryChanged(query)
                     }
-                    // choose the flow based on the search query
-                    val result = if (searchQueryUiState.isSearching)
-                        searchResultsFlowState else articlesFlowState
-                    NewsArticlesListScreen(result, listState) {
+                    NewsArticlesListScreen(articlesFlowState, listState) {
                         newsState = NewsState.NewsArticleDetailScreenState(it)
                     }
                 }

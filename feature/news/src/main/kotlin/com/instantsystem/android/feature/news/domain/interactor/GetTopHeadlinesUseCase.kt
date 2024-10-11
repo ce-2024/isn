@@ -3,7 +3,7 @@ package com.instantsystem.android.feature.news.domain.interactor
 import com.instantsystem.android.feature.news.data.entity.TopHeadlinesRequest
 import com.instantsystem.android.feature.news.data.repository.NewsRepository
 import com.instantsystem.android.feature.news.domain.model.NewsArticle
-import com.instantsystem.android.feature.news.toModel
+import com.instantsystem.android.feature.news.toDomain
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -20,7 +20,7 @@ class GetTopHeadlinesUseCase(
                 TopHeadlinesRequest(
                     country = param.country
                 )
-            )?.toModel() ?: emptyList()
+            )?.articles?.toDomain() ?: emptyList()
         }
 }
 
