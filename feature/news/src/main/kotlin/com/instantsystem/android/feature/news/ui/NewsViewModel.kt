@@ -72,8 +72,12 @@ class NewsViewModel(
             config = PagingConfig(pageSize = MAX_PER_PAGE, enablePlaceholders = true),
             pagingSourceFactory = { getNewsPagingSourceFactory(searchQueryState) }
         ).flow
-    }.debounce(800)
+    }
+        // let s  reduce the rate of updates and so call to backend server
+        .debounce(800)
+        // distinct until changed to avoid duplicate emissions
         .distinctUntilChanged()
+        // cache the flow to persist through configuration changes
         .cachedIn(viewModelScope)
 
     /**
