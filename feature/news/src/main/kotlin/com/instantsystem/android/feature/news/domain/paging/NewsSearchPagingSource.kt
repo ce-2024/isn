@@ -3,13 +3,13 @@ package com.instantsystem.android.feature.news.domain.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.instantsystem.android.feature.news.data.api.NewsApiService.Companion.SUCCESS_SERVER_RESULT_RESPONSE
-import com.instantsystem.android.feature.news.data.entity.Articles
-import com.instantsystem.android.feature.news.data.entity.TopHeadlinesRequest
+import com.instantsystem.android.feature.news.data.entity.SearchEverythingRequest
 import com.instantsystem.android.feature.news.data.repository.NewsRepository
 import com.instantsystem.android.feature.news.domain.model.NewsArticle
+import com.instantsystem.android.feature.news.toDomain
 
-class NewsPagingSource(
-    private val country: String,
+class NewsSearchPagingSource(
+    private val request: SearchEverythingRequest,
     private val repository: NewsRepository
 ) : PagingSource<Int, NewsArticle>() {
 
@@ -23,11 +23,10 @@ class NewsPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NewsArticle> {
         return try {
             val nextPageNumber = params.key ?: 1
-            val response = repository.topHeadlines(
-                TopHeadlinesRequest(
+            val response = repository.everything(
+                request.copy(
                     page = nextPageNumber,
-                    pageSize = params.loadSize,
-                    country = country
+                    pageSize = params.loadSize
                 )
             )
             if (response?.status != SUCCESS_SERVER_RESULT_RESPONSE) {
@@ -42,21 +41,4 @@ class NewsPagingSource(
             LoadResult.Error(e)
         }
     }
-}
-
-fun List<Articles>?.toDomain(): List<NewsArticle> {
-    return this?.filterNot {
-        it.title.isNullOrBlank() || it.urlToImage.isNullOrBlank()
-    }?.map {
-        NewsArticle(
-            title = it.title.orEmpty(),
-            description = it.description.orEmpty(),
-            url = it.url.orEmpty(),
-            urlToImage = it.urlToImage.orEmpty(),
-            content = it.content?.take(200).orEmpty(),
-            author = it.author.orEmpty(),
-            publishedAt = it.publishedAt.orEmpty(),
-            source = it.source?.name.orEmpty()
-        )
-    } ?: emptyList()
 }

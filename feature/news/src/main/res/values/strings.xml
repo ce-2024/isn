@@ -7,4 +7,8 @@
     <string name="news_error_message">Message: %s</string>
     <string name="published_at">Date: %s</string>
     <string name="article_source">Source: %s</string>
+    <string name="hide_advanced_search_options">hide advanced search options</string>
+    <string name="show_advanced_search_options">Show advanced search options</string>
+    <string name="search_news">Search News</string>
+    <string name="hide">Hide</string>
 </resources>

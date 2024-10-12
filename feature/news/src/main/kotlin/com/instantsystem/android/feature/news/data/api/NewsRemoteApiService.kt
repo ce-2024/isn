@@ -1,7 +1,9 @@
 package com.instantsystem.android.feature.news.data.api
 
+import com.instantsystem.android.feature.news.data.entity.DefaultNewsResponse
+import com.instantsystem.android.feature.news.data.entity.SearchEverythingRequest
 import com.instantsystem.android.feature.news.data.entity.TopHeadlinesRequest
-import com.instantsystem.android.feature.news.data.entity.TopHeadlinesResponse
+import com.instantsystem.android.feature.news.data.entity.toQueryParameters
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -12,7 +14,7 @@ class NewsRemoteApiService(
     private val newsHttpClient: HttpClient
 ) : NewsApiService {
 
-    override suspend fun topHeadlines(topHeadlinesRequest: TopHeadlinesRequest): TopHeadlinesResponse? {
+    override suspend fun topHeadlines(topHeadlinesRequest: TopHeadlinesRequest): DefaultNewsResponse? {
         return newsHttpClient.get(NewsApiService.TOP_HEADLINES) {
             parameter(NewsApiService.PAGE, topHeadlinesRequest.page)
             parameter(NewsApiService.COUNTRY, topHeadlinesRequest.country)
@@ -21,6 +23,13 @@ class NewsRemoteApiService(
                 topHeadlinesRequest.pageSize?.coerceAtMost(NewsApiService.MAX_PER_PAGE)
             )
         }.body()
+    }
+
+    override suspend fun everything(searchEverythingRequest: SearchEverythingRequest): DefaultNewsResponse? {
+        return newsHttpClient.get(
+            NewsApiService.EVERYTHING + "?" +
+                    searchEverythingRequest.toQueryParameters()
+        ).body()
     }
 
 }

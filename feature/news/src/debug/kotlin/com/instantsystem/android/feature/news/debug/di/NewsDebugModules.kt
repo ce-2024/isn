@@ -3,6 +3,7 @@ package com.instantsystem.android.feature.news.debug.di
 import androidx.lifecycle.SavedStateHandle
 import com.instantsystem.android.feature.news.domain.interactor.GetNewsPagingSource
 import com.instantsystem.android.feature.news.domain.interactor.GetTopHeadlinesUseCase
+import com.instantsystem.android.feature.news.domain.interactor.SearchNewsUseCase
 import com.instantsystem.android.feature.news.ui.NewsViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -20,7 +21,8 @@ val newsDebugFeatureModules = module {
     factory { GetTopHeadlinesUseCase(get(), UnconfinedTestDispatcher()) }
 
     single { GetNewsPagingSource(get()) }
+    single { SearchNewsUseCase(get()) }
     viewModel { (savedStateHandle: SavedStateHandle) ->
-        NewsViewModel(savedStateHandle, get())
+        NewsViewModel(savedStateHandle, get(), get())
     }
 }

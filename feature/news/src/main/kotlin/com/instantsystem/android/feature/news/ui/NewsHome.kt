@@ -7,8 +7,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -32,12 +34,13 @@ internal sealed class NewsState : Parcelable {
 @Composable
 fun NewsHomeScreen(modifier: Modifier = Modifier) {
     val viewModel = koinViewModel<NewsViewModel>()
-    val articlesFlowState = viewModel.paginatedNewsFlow.collectAsLazyPagingItems()
+    val articlesFlowState = viewModel.newsPagingResults.collectAsLazyPagingItems()
     val listState = rememberLazyListState()
     var newsState by rememberSaveable {
         mutableStateOf<NewsState>(NewsState.NewsArticlesListScreenState)
     }
 
+    val searchQueryUiState by viewModel.searchQueryUiState.collectAsState()
     // we will use animated content as we have all information to build
     // NewsArticles and NewsArticleDetail
     AnimatedContent(
@@ -52,8 +55,13 @@ fun NewsHomeScreen(modifier: Modifier = Modifier) {
     ) { targetState ->
         when (targetState) {
             NewsState.NewsArticlesListScreenState -> {
-                NewsArticlesListScreen(articlesFlowState, listState) {
-                    newsState = NewsState.NewsArticleDetailScreenState(it)
+                Column {
+                    NewsSearchBoxScreen(searchQueryUiState) { query ->
+                        viewModel.onSearchQueryChanged(query)
+                    }
+                    NewsArticlesListScreen(articlesFlowState, listState) {
+                        newsState = NewsState.NewsArticleDetailScreenState(it)
+                    }
                 }
             }
 

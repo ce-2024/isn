@@ -1,13 +1,13 @@
 package com.instantsystem.android.feature.news.domain.interactor
 
 import com.instantsystem.android.feature.news.data.repository.NewsRepository
-import com.instantsystem.android.feature.news.domain.paging.NewsPagingSource
+import com.instantsystem.android.feature.news.domain.paging.NewsTopHeadlinesPagingSource
 
 class GetNewsPagingSource(
     private val repository: NewsRepository
 ) {
     operator fun invoke(param: GetNewsPagingSourceParam) =
-        NewsPagingSource(param.country, repository)
+        NewsTopHeadlinesPagingSource(param.country, repository)
 }
 
 data class GetNewsPagingSourceParam(
