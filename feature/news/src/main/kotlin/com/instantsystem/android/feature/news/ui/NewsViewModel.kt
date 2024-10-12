@@ -13,8 +13,11 @@ import com.instantsystem.android.feature.news.domain.interactor.GetNewsPagingSou
 import com.instantsystem.android.feature.news.domain.interactor.SearchNewsUseCase
 import com.instantsystem.android.feature.news.domain.interactor.SearchQuery
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
@@ -63,13 +66,15 @@ class NewsViewModel(
      * When the search flow emits a new value the previous flow is cancelled.
      * The flow is cached in viewModel to persist through configuration changes.
      */
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     val newsPagingResults = _searchQueryUiState.flatMapLatest { searchQueryState ->
         Pager(
             config = PagingConfig(pageSize = MAX_PER_PAGE, enablePlaceholders = true),
             pagingSourceFactory = { getNewsPagingSourceFactory(searchQueryState) }
         ).flow
-    }.cachedIn(viewModelScope)
+    }.debounce(800)
+        .distinctUntilChanged()
+        .cachedIn(viewModelScope)
 
     /**
      * PagingSourceFactory : will provide the correct paging source based on searchQueryState
