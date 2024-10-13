@@ -1,11 +1,11 @@
 package com.instantsystem.android.feature.news.data.api
 
+import com.instantsystem.android.feature.news.data.entity.DefaultNewsResponse
 import com.instantsystem.android.feature.news.data.entity.TopHeadlinesRequest
-import com.instantsystem.android.feature.news.data.entity.TopHeadlinesResponse
 
 interface NewsApiService {
 
-    suspend fun topHeadlines(topHeadlinesRequest: TopHeadlinesRequest): TopHeadlinesResponse?
+    suspend fun topHeadlines(topHeadlinesRequest: TopHeadlinesRequest): DefaultNewsResponse?
 
     companion object {
         private const val BASE_URL = "https://newsapi.org"
