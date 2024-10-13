@@ -2,11 +2,8 @@ package com.instantsystem.android.feature.news.ui
 
 import android.os.Parcelable
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.togetherWith
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,6 +26,7 @@ internal sealed class NewsState : Parcelable {
     data class NewsArticleDetailScreenState(val article: NewsArticle) : NewsState()
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun NewsHomeScreen(modifier: Modifier = Modifier) {
     val viewModel = koinViewModel<NewsViewModel>()
@@ -37,29 +35,36 @@ fun NewsHomeScreen(modifier: Modifier = Modifier) {
     var newsState by rememberSaveable {
         mutableStateOf<NewsState>(NewsState.NewsArticlesListScreenState)
     }
-
-    // we will use animated content as we have all information to build
-    // NewsArticles and NewsArticleDetail
-    AnimatedContent(
-        modifier = modifier,
-        targetState = newsState,
-        label = "News List and details",
-        transitionSpec = {
-            fadeIn() + slideInVertically(animationSpec = tween(400),
-                initialOffsetY = { fullHeight -> fullHeight }) togetherWith
-                    fadeOut(animationSpec = tween(200))
-        }
-    ) { targetState ->
-        when (targetState) {
-            NewsState.NewsArticlesListScreenState -> {
-                NewsArticlesListScreen(articlesFlowState, listState) {
-                    newsState = NewsState.NewsArticleDetailScreenState(it)
+    SharedTransitionLayout {
+        // we will use animated content as we have all information to build
+        // NewsArticles and NewsArticleDetail
+        AnimatedContent(
+            modifier = modifier,
+            targetState = newsState,
+            label = "News List and details"
+        ) { targetState ->
+            when (targetState) {
+                NewsState.NewsArticlesListScreenState -> {
+                    NewsArticlesListScreen(
+                        articlesFlowState,
+                        listState,
+                        onArticleClicked = {
+                            newsState = NewsState.NewsArticleDetailScreenState(it)
+                        },
+                        animatedVisibilityScope = this@AnimatedContent,
+                        sharedTransitionScope = this@SharedTransitionLayout
+                    )
                 }
-            }
 
-            is NewsState.NewsArticleDetailScreenState -> {
-                NewsArticleDetailScreen(article = targetState.article) {
-                    newsState = NewsState.NewsArticlesListScreenState
+                is NewsState.NewsArticleDetailScreenState -> {
+                    NewsArticleDetailScreen(
+                        article = targetState.article,
+                        onBackPressed = {
+                            newsState = NewsState.NewsArticlesListScreenState
+                        },
+                        animatedVisibilityScope = this@AnimatedContent,
+                        sharedTransitionScope = this@SharedTransitionLayout
+                    )
                 }
             }
         }
