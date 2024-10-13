@@ -3,10 +3,10 @@ package com.instantsystem.android.feature.news.domain.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.instantsystem.android.feature.news.data.api.NewsApiService.Companion.SUCCESS_SERVER_RESULT_RESPONSE
-import com.instantsystem.android.feature.news.data.entity.Article
 import com.instantsystem.android.feature.news.data.entity.TopHeadlinesRequest
 import com.instantsystem.android.feature.news.data.repository.NewsRepository
 import com.instantsystem.android.feature.news.domain.model.NewsArticle
+import com.instantsystem.android.feature.news.ext.toDomain
 
 class NewsPagingSource(
     private val country: String,
@@ -42,21 +42,4 @@ class NewsPagingSource(
             LoadResult.Error(e)
         }
     }
-}
-
-fun List<Article>?.toDomain(): List<NewsArticle> {
-    return this?.filterNot {
-        it.title.isNullOrBlank() || it.urlToImage.isNullOrBlank()
-    }?.map {
-        NewsArticle(
-            title = it.title.orEmpty(),
-            description = it.description.orEmpty(),
-            url = it.url.orEmpty(),
-            urlToImage = it.urlToImage.orEmpty(),
-            content = it.content?.take(200).orEmpty(),
-            author = it.author.orEmpty(),
-            publishedAt = it.publishedAt.orEmpty(),
-            source = it.source?.name.orEmpty()
-        )
-    } ?: emptyList()
 }
