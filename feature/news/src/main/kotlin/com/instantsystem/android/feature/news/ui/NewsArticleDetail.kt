@@ -63,20 +63,26 @@ fun NewsArticleDetailScreen(
             .padding(defaultPadding)
     ) {
         Row {
-            IconButton(onClick = { onBackPressed() }) {
+            IconButton(
+                modifier = Modifier.align(alignment = Alignment.CenterVertically),
+                onClick = { onBackPressed() }) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = null
                 )
             }
+            // Article title
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(defaultPadding),
+                maxLines = 8,
+                overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.titleLarge,
                 text = currentArticle.title
             )
         }
+        // Article date
         Text(
             text = stringResource(R.string.published_at, article.publishedAt),
             modifier = Modifier.padding(6.dp),
@@ -84,6 +90,7 @@ fun NewsArticleDetailScreen(
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.labelSmall,
         )
+        // Article source
         Text(
             text = stringResource(R.string.article_source, article.source),
             modifier = Modifier.padding(6.dp),
@@ -91,6 +98,7 @@ fun NewsArticleDetailScreen(
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.labelSmall,
         )
+        // Article image
         AsyncImage(
             modifier = Modifier
                 .fillMaxWidth()
@@ -100,6 +108,7 @@ fun NewsArticleDetailScreen(
             contentDescription = null,
             contentScale = ContentScale.Crop,
         )
+        // Article content
         Text(
             modifier = Modifier
                 .fillMaxSize()
@@ -107,6 +116,7 @@ fun NewsArticleDetailScreen(
             text = currentArticle.content,
             style = MaterialTheme.typography.bodyMedium
         )
+        // Article url link
         Button(
             modifier = Modifier
                 .align(Alignment.End)
@@ -133,14 +143,14 @@ private fun NewsArticleDetailScreenPreview() {
         Surface {
             NewsArticleDetailScreen(
                 NewsArticle(
-                    title = "Title",
-                    description = "description",
-                    url = "Url",
+                    title = stringResource(R.string.big_text_description),
+                    publishedAt = "publishedAt",
+                    source = "source",
+                    author = "author",
+                    description = stringResource(R.string.big_text_description),
                     urlToImage = "UrlToImage",
                     content = stringResource(R.string.big_text_description),
-                    author = "author",
-                    publishedAt = "publishedAt",
-                    source = "source"
+                    url = "Url"
                 )
             )
         }
