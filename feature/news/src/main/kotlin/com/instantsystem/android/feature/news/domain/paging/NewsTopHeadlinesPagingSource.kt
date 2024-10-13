@@ -8,7 +8,7 @@ import com.instantsystem.android.feature.news.data.repository.NewsRepository
 import com.instantsystem.android.feature.news.domain.model.NewsArticle
 import com.instantsystem.android.feature.news.ext.toDomain
 
-class NewsPagingSource(
+class NewsTopHeadlinesPagingSource(
     private val country: String,
     private val repository: NewsRepository
 ) : PagingSource<Int, NewsArticle>() {
