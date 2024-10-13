@@ -3,7 +3,7 @@ package com.instantsystem.android.feature.news.domain.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.instantsystem.android.feature.news.data.api.NewsApiService.Companion.SUCCESS_SERVER_RESULT_RESPONSE
-import com.instantsystem.android.feature.news.data.entity.Articles
+import com.instantsystem.android.feature.news.data.entity.Article
 import com.instantsystem.android.feature.news.data.entity.TopHeadlinesRequest
 import com.instantsystem.android.feature.news.data.repository.NewsRepository
 import com.instantsystem.android.feature.news.domain.model.NewsArticle
@@ -44,7 +44,7 @@ class NewsPagingSource(
     }
 }
 
-fun List<Articles>?.toDomain(): List<NewsArticle> {
+fun List<Article>?.toDomain(): List<NewsArticle> {
     return this?.filterNot {
         it.title.isNullOrBlank() || it.urlToImage.isNullOrBlank()
     }?.map {

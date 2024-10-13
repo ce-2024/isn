@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Articles(
+data class Article(
     @SerialName("source") var source: Source? = Source(),
     @SerialName("author") var author: String? = null,
     @SerialName("title") var title: String? = null,
