@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TopHeadlinesResponse(
+data class DefaultNewsResponse(
     @SerialName("status") var status: String? = null,
     @SerialName("code") var code: String? = null,
     @SerialName("message") var message: String? = null,
