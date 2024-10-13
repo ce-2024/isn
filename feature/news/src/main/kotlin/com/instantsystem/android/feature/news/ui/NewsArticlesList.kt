@@ -80,7 +80,7 @@ fun NewsArticlesListScreen(
 
         items(
             count = savedPagingItems.itemCount,
-            key = savedPagingItems.itemKey { article -> article.url },
+            key = savedPagingItems.itemKey { article -> article.id },
             contentType = savedPagingItems.itemContentType { "News Article" }
         ) { index ->
             val newsArticle = savedPagingItems[index]
@@ -190,6 +190,7 @@ private fun NewsArticleItemPreview() {
         Surface {
             NewsArticleItem(
                 NewsArticle(
+                    id = "1",
                     publishedAt = "2024-10-06T16:07:08Z",
                     author = "author",
                     source = "source",

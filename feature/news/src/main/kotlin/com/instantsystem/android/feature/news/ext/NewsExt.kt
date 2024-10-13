@@ -2,12 +2,14 @@ package com.instantsystem.android.feature.news.ext
 
 import com.instantsystem.android.feature.news.data.entity.Article
 import com.instantsystem.android.feature.news.domain.model.NewsArticle
+import java.util.UUID
 
 fun List<Article>?.toDomain(): List<NewsArticle> {
     return this?.filterNot {
         it.title.isNullOrBlank() || it.urlToImage.isNullOrBlank()
     }?.map {
         NewsArticle(
+            id = UUID.randomUUID().toString(),
             title = it.title.orEmpty(),
             description = it.description.orEmpty(),
             url = it.url.orEmpty(),

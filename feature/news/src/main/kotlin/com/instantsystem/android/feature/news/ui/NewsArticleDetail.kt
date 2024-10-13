@@ -143,6 +143,7 @@ private fun NewsArticleDetailScreenPreview() {
         Surface {
             NewsArticleDetailScreen(
                 NewsArticle(
+                    id = "1",
                     title = stringResource(R.string.big_text_description),
                     publishedAt = "2024-10-06T16:07:08Z",
                     source = "source",
