@@ -8,19 +8,19 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.instantsystem.android.feature.news.data.api.NewsApiService.Companion.MAX_PER_PAGE
-import com.instantsystem.android.feature.news.domain.interactor.GetNewsPagingSource
-import com.instantsystem.android.feature.news.domain.interactor.GetNewsPagingSourceParam
+import com.instantsystem.android.feature.news.domain.interactor.GetNewsTopHeadlinesPagingSource
+import com.instantsystem.android.feature.news.domain.interactor.TopHeadlinesPagingSourceParam
 import com.instantsystem.android.feature.news.domain.model.NewsArticle
 import kotlinx.coroutines.flow.Flow
 import java.util.Locale
 
 /**
  * News viewModel
- * depends on [GetNewsPagingSource] to fetch news from server
+ * depends on [GetNewsTopHeadlinesPagingSource] to fetch news from server
  */
 class NewsViewModel(
     savedStateHandle: SavedStateHandle,
-    private val getTopHeadlinesPagingSource: GetNewsPagingSource,
+    private val getTopHeadlinesPagingSource: GetNewsTopHeadlinesPagingSource,
 ) : ViewModel() {
 
     private val country: String =
@@ -33,7 +33,7 @@ class NewsViewModel(
         config = PagingConfig(pageSize = MAX_PER_PAGE, enablePlaceholders = true),
         pagingSourceFactory = {
             getTopHeadlinesPagingSource(
-                GetNewsPagingSourceParam(
+                TopHeadlinesPagingSourceParam(
                     country = country
                 )
             )
