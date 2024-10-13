@@ -2,6 +2,12 @@ package com.instantsystem.android.feature.news.ui
 
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.EnterExitState
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,10 +49,13 @@ import com.instantsystem.android.feature.news.ui.tag.NewsHomeScreenTestTags
  * @param article: Article to show
  * @param onBackPressed : handle back press to return to list of news articles
  */
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun NewsArticleDetailScreen(
     article: NewsArticle,
-    onBackPressed: () -> Unit = {}
+    onBackPressed: () -> Unit = {},
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     val currentArticle by rememberSaveable { mutableStateOf(article) }
     val scrollState = rememberScrollState()
@@ -72,15 +81,26 @@ fun NewsArticleDetailScreen(
                 )
             }
             // Article title
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(defaultPadding),
-                maxLines = 8,
-                overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.titleLarge,
-                text = currentArticle.title
-            )
+            with(sharedTransitionScope) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(defaultPadding)
+                        .sharedBounds(
+                            rememberSharedContentState(
+                                key = NewsSharedElementKey(
+                                    id = currentArticle.title,
+                                    type = NewsSharedElementType.TITLE
+                                )
+                            ),
+                            animatedVisibilityScope = animatedVisibilityScope
+                        ),
+                    maxLines = 8,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleLarge,
+                    text = currentArticle.title
+                )
+            }
         }
         // Article date
         Text(
@@ -99,15 +119,26 @@ fun NewsArticleDetailScreen(
             style = MaterialTheme.typography.labelSmall,
         )
         // Article image
-        AsyncImage(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(defaultPadding)
-                .clip(RoundedCornerShape(8.dp)),
-            model = currentArticle.urlToImage,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-        )
+        with(sharedTransitionScope) {
+            AsyncImage(
+                modifier = Modifier
+                    .sharedElement(
+                        rememberSharedContentState(
+                            key = NewsSharedElementKey(
+                                id = currentArticle.urlToImage,
+                                type = NewsSharedElementType.IMAGE
+                            )
+                        ),
+                        animatedVisibilityScope = animatedVisibilityScope
+                    )
+                    .fillMaxWidth()
+                    .padding(defaultPadding)
+                    .clip(RoundedCornerShape(8.dp)),
+                model = currentArticle.urlToImage,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+            )
+        }
         // Article content
         Text(
             modifier = Modifier
@@ -129,6 +160,7 @@ fun NewsArticleDetailScreen(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     name = "DefaultPreviewDark"
@@ -141,19 +173,28 @@ fun NewsArticleDetailScreen(
 private fun NewsArticleDetailScreenPreview() {
     InstantSystemNewsTheme {
         Surface {
-            NewsArticleDetailScreen(
-                NewsArticle(
-                    id = "1",
-                    title = stringResource(R.string.big_text_description),
-                    publishedAt = "2024-10-06T16:07:08Z",
-                    source = "source",
-                    author = "author",
-                    description = stringResource(R.string.big_text_description),
-                    urlToImage = "UrlToImage",
-                    content = stringResource(R.string.big_text_description),
-                    url = "Url"
+            SharedTransitionLayout {
+                NewsArticleDetailScreen(
+                    NewsArticle(
+                        id = "1",
+                        title = stringResource(R.string.big_text_description),
+                        publishedAt = "2024-10-06T16:07:08Z",
+                        source = "source",
+                        author = "author",
+                        description = stringResource(R.string.big_text_description),
+                        urlToImage = "UrlToImage",
+                        content = stringResource(R.string.big_text_description),
+                        url = "Url"
+                    ),
+                    animatedVisibilityScope = FakeAnimatedVisibilityScope(
+                        transition = updateTransition(
+                            targetState = EnterExitState.Visible,
+                            label = "EnterExitTransition"
+                        )
+                    ),
+                    sharedTransitionScope = this@SharedTransitionLayout
                 )
-            )
+            }
         }
     }
 }

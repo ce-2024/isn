@@ -1,6 +1,12 @@
 package com.instantsystem.android.feature.news.ui
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.EnterExitState
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,11 +47,14 @@ import java.util.Locale
 /**
  *
  */
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun NewsArticlesListScreen(
     savedPagingItems: LazyPagingItems<NewsArticle>,
     listState: LazyListState,
-    onArticleClicked: (NewsArticle) -> Unit = {}
+    onArticleClicked: (NewsArticle) -> Unit = {},
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     LazyColumn(
         state = listState,
@@ -85,7 +94,12 @@ fun NewsArticlesListScreen(
         ) { index ->
             val newsArticle = savedPagingItems[index]
             newsArticle?.let {
-                NewsArticleItem(it, onArticleClicked)
+                NewsArticleItem(
+                    it,
+                    onArticleClicked,
+                    sharedTransitionScope,
+                    animatedVisibilityScope
+                )
             }
         }
 
@@ -110,10 +124,13 @@ fun NewsArticlesListScreen(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun NewsArticleItem(
     article: NewsArticle,
-    onArticleClicked: (NewsArticle) -> Unit = {}
+    onArticleClicked: (NewsArticle) -> Unit = {},
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     val defaultPadding = 10.dp
     Card(
@@ -133,24 +150,46 @@ private fun NewsArticleItem(
             style = MaterialTheme.typography.labelSmall,
         )
         // Article title
-        Text(
-            text = article.title,
-            modifier = Modifier
-                .padding(horizontal = defaultPadding),
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.titleLarge,
-        )
+        with(sharedTransitionScope) {
+            Text(
+                text = article.title,
+                modifier = Modifier
+                    .sharedElement(
+                        rememberSharedContentState(
+                            key = NewsSharedElementKey(
+                                id = article.title,
+                                type = NewsSharedElementType.TITLE
+                            )
+                        ),
+                        animatedVisibilityScope = animatedVisibilityScope
+                    )
+                    .padding(horizontal = defaultPadding),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.titleLarge,
+            )
+        }
         // Article image
-        AsyncImage(
-            modifier = Modifier
-                .requiredHeight(256.dp)
-                .padding(defaultPadding)
-                .clip(RoundedCornerShape(8.dp)),
-            model = article.urlToImage,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-        )
+        with(sharedTransitionScope) {
+            AsyncImage(
+                modifier = Modifier
+                    .sharedElement(
+                        rememberSharedContentState(
+                            key = NewsSharedElementKey(
+                                id = article.urlToImage,
+                                type = NewsSharedElementType.IMAGE
+                            )
+                        ),
+                        animatedVisibilityScope = animatedVisibilityScope
+                    )
+                    .requiredHeight(256.dp)
+                    .padding(defaultPadding)
+                    .clip(RoundedCornerShape(8.dp)),
+                model = article.urlToImage,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+            )
+        }
         // Article description
         Text(
             text = article.description,
@@ -176,6 +215,7 @@ private fun NewsEmptyScreen() {
     )
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     name = "DefaultPreviewDark"
@@ -188,19 +228,28 @@ private fun NewsEmptyScreen() {
 private fun NewsArticleItemPreview() {
     InstantSystemNewsTheme {
         Surface {
-            NewsArticleItem(
-                NewsArticle(
-                    id = "1",
-                    publishedAt = "2024-10-06T16:07:08Z",
-                    author = "author",
-                    source = "source",
-                    title = stringResource(R.string.big_text_description),
-                    description = stringResource(R.string.big_text_description),
-                    url = "url",
-                    urlToImage = "UrlToImage",
-                    content = "The unformatted content of the article",
+            SharedTransitionLayout {
+                NewsArticleItem(
+                    NewsArticle(
+                        id = "1",
+                        publishedAt = "2024-10-06T16:07:08Z",
+                        author = "author",
+                        source = "source",
+                        title = stringResource(R.string.big_text_description),
+                        description = stringResource(R.string.big_text_description),
+                        url = "url",
+                        urlToImage = "UrlToImage",
+                        content = "The unformatted content of the article"
+                    ),
+                    animatedVisibilityScope = FakeAnimatedVisibilityScope(
+                        transition = updateTransition(
+                            targetState = EnterExitState.Visible,
+                            label = "EnterExitTransition"
+                        )
+                    ),
+                    sharedTransitionScope = this@SharedTransitionLayout
                 )
-            )
+            }
         }
     }
 }
