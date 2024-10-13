@@ -29,6 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
 import com.instantsystem.android.core.designsystem.theme.InstantSystemNewsTheme
 import com.instantsystem.android.feature.news.R
@@ -56,21 +58,9 @@ fun NewsArticlesListScreen(
 
         when (savedPagingItems.loadState.refresh) {
             is LoadState.Loading -> {
-                item {
-                    Text(
-                        text = stringResource(R.string.loading),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentWidth(Alignment.CenterHorizontally)
-                    )
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp)
-                            .wrapContentWidth(Alignment.CenterHorizontally)
-                    )
+                items(count = 10) {
+                    ShimmerNewsArticleItem()
                 }
-
             }
 
             is LoadState.Error -> {
@@ -88,7 +78,11 @@ fun NewsArticlesListScreen(
             }
         }
 
-        items(count = savedPagingItems.itemCount) { index ->
+        items(
+            count = savedPagingItems.itemCount,
+            key = savedPagingItems.itemKey { article -> article.url },
+            contentType = savedPagingItems.itemContentType { "News Article" }
+        ) { index ->
             val newsArticle = savedPagingItems[index]
             newsArticle?.let {
                 NewsArticleItem(it, onArticleClicked)
@@ -130,15 +124,15 @@ private fun NewsArticleItem(
                 onArticleClicked(article)
             }
     ) {
+        // Article Date
         Text(
             text = stringResource(R.string.published_at, article.publishedAt),
-            modifier = Modifier
-                .padding(6.dp),
+            modifier = Modifier.padding(defaultPadding),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.labelSmall,
         )
-
+        // Article title
         Text(
             text = article.title,
             modifier = Modifier
@@ -147,6 +141,7 @@ private fun NewsArticleItem(
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.titleLarge,
         )
+        // Article image
         AsyncImage(
             modifier = Modifier
                 .requiredHeight(256.dp)
@@ -156,6 +151,7 @@ private fun NewsArticleItem(
             contentDescription = null,
             contentScale = ContentScale.Crop,
         )
+        // Article description
         Text(
             text = article.description,
             modifier = Modifier
@@ -194,11 +190,11 @@ private fun NewsArticleItemPreview() {
         Surface {
             NewsArticleItem(
                 NewsArticle(
-                    publishedAt = "publishedAt",
+                    publishedAt = stringResource(R.string.big_text_description),
                     author = "author",
                     source = "source",
-                    title = "Title",
-                    description = "description",
+                    title = stringResource(R.string.big_text_description),
+                    description = stringResource(R.string.big_text_description),
                     url = "url",
                     urlToImage = "UrlToImage",
                     content = "The unformatted content of the article",
