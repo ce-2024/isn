@@ -13,6 +13,7 @@ private const val ARTICLE_DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'"
 
 @Parcelize
 data class NewsArticle(
+    val id: String,
     val title: String,
     val publishedAt: String,
     val source: String,
