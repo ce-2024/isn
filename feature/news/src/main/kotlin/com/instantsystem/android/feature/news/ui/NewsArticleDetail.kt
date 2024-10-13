@@ -62,7 +62,7 @@ fun NewsArticleDetailScreen(
             .verticalScroll(scrollState)
             .padding(defaultPadding)
     ) {
-        Row {
+        Row(modifier = Modifier.padding(defaultPadding)) {
             IconButton(
                 modifier = Modifier.align(alignment = Alignment.CenterVertically),
                 onClick = { onBackPressed() }) {
@@ -84,8 +84,8 @@ fun NewsArticleDetailScreen(
         }
         // Article date
         Text(
-            text = stringResource(R.string.published_at, article.publishedAt),
-            modifier = Modifier.padding(6.dp),
+            text = stringResource(R.string.published_at, article.date),
+            modifier = Modifier.padding(defaultPadding),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.labelSmall,
@@ -93,7 +93,7 @@ fun NewsArticleDetailScreen(
         // Article source
         Text(
             text = stringResource(R.string.article_source, article.source),
-            modifier = Modifier.padding(6.dp),
+            modifier = Modifier.padding(defaultPadding),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.labelSmall,
@@ -144,7 +144,7 @@ private fun NewsArticleDetailScreenPreview() {
             NewsArticleDetailScreen(
                 NewsArticle(
                     title = stringResource(R.string.big_text_description),
-                    publishedAt = "publishedAt",
+                    publishedAt = "2024-10-06T16:07:08Z",
                     source = "source",
                     author = "author",
                     description = stringResource(R.string.big_text_description),

@@ -126,7 +126,7 @@ private fun NewsArticleItem(
     ) {
         // Article Date
         Text(
-            text = stringResource(R.string.published_at, article.publishedAt),
+            text = stringResource(R.string.published_at, article.date),
             modifier = Modifier.padding(defaultPadding),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -190,7 +190,7 @@ private fun NewsArticleItemPreview() {
         Surface {
             NewsArticleItem(
                 NewsArticle(
-                    publishedAt = stringResource(R.string.big_text_description),
+                    publishedAt = "2024-10-06T16:07:08Z",
                     author = "author",
                     source = "source",
                     title = stringResource(R.string.big_text_description),
