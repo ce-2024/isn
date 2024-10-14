@@ -62,16 +62,19 @@ Set the API key in your local.properties file under your root project as follows
 
 # Demo
 
-## Handle Server Error Max Request
+## Handling Server error
+<img src="https://github.com/user-attachments/assets/c52b064f-e6f7-409c-9d03-6ad468f7c526" width="280">
+<img src="https://github.com/user-attachments/assets/5f1cef0b-5aa7-488d-87db-f13a4cc6d400" width="280">
 
-https://github.com/user-attachments/assets/262cf08f-f841-44d0-8c86-15efe97cce2c
+## Handling Server empty result
+<img src="https://github.com/user-attachments/assets/2e0206e6-ed37-4bfc-8d67-e79210764959" width="280">
+<img src="https://github.com/user-attachments/assets/dc7abd87-8516-48fe-9d81-91d9a4f7a712" width="280">
 
-## Handle Server Error No API Key
 
-https://github.com/user-attachments/assets/b4688576-c312-4abc-be4b-28ef9a89d043
+## App demo
 
-## fetch data with pagination
+https://github.com/user-attachments/assets/11e96834-2ee2-4e5a-95df-ad89a1c2f0d7
 
-https://github.com/user-attachments/assets/c5e1a707-461f-47a5-96e7-97153d5e9946
+
 
 
