@@ -3,8 +3,8 @@
     <string name="loading">Waiting for items to load from the backend</string>
     <string name="article_link">More</string>
     <string name="loading_error">Some error happened!!</string>
-    <string name="empty_result">No articles for country : %s</string>
-    <string name="news_error_message">Message: %s</string>
+    <string name="empty_result">No results found</string>
+    <string name="empty_result_message">No articles for country : %s</string>
     <string name="published_at">Date: %s</string>
     <string name="article_source">Source: %s</string>
 </resources>

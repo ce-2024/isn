@@ -82,7 +82,13 @@ fun NewsArticlesListScreen(
             else -> {
                 if (savedPagingItems.itemCount == 0)
                     item {
-                        NewsEmptyScreen()
+                        NoNewsResults(
+                            stringResource(R.string.empty_result),
+                            stringResource(
+                                R.string.empty_result_message,
+                                Locale.getDefault().country
+                            ),
+                        )
                     }
             }
         }
@@ -105,13 +111,15 @@ fun NewsArticlesListScreen(
 
         when (savedPagingItems.loadState.append) {
             is LoadState.Loading -> {
-                item {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 25.dp)
-                            .wrapContentWidth(Alignment.CenterHorizontally)
-                    )
+                if (savedPagingItems.itemCount != 0) {
+                    item {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 25.dp)
+                                .wrapContentWidth(Alignment.CenterHorizontally)
+                        )
+                    }
                 }
             }
 
@@ -200,19 +208,6 @@ private fun NewsArticleItem(
             style = MaterialTheme.typography.bodyMedium,
         )
     }
-}
-
-@Composable
-private fun NewsEmptyScreen() {
-    Text(
-        modifier = Modifier
-            .padding(vertical = 10.dp)
-            .testTag(
-                NewsHomeScreenTestTags.NEWS_ARTICLE_EMPTY_SCREEN
-            ),
-        text = stringResource(R.string.empty_result, Locale.getDefault().country),
-        style = MaterialTheme.typography.titleLarge
-    )
 }
 
 @OptIn(ExperimentalSharedTransitionApi::class)
