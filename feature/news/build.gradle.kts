@@ -13,10 +13,8 @@ android {
 
     defaultConfig {
         minSdk = 28
-
-        testInstrumentationRunner =
-            "com.instantsystem.android.feature.news.test.runner.NewsAppInstrumentationTestRunner"
         consumerProguardFiles("consumer-rules.pro")
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
