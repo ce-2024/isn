@@ -1,14 +1,16 @@
 name: News App GitHub Actions
 on:
-  pull_request :
-    branches : [master]
-  push :
-    branches : [master]
+  pull_request:
+    branches: [ master ]
+  push:
+    branches: [ master ]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -18,10 +20,12 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
       - name: Build with Gradle
         run: ./gradlew build
+
       - name: Upload artifact
-          - uses: actions/upload-artifact@v4
-                with:
-                  name: Instant-System-News.apk
-                  path: app/build/outputs/apk/debug/app-debug.apk
+        uses: actions/upload-artifact@v4
+        with:
+          name: Instant-System-News.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
